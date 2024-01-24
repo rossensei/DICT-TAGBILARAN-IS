@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SubCategoryController;
 use Illuminate\Foundation\Application;
@@ -37,5 +38,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/subcategory', [SubCategoryController::class, 'index'])->name('subcategory.index');
 });
+
+
+Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
 
 require __DIR__.'/auth.php';
