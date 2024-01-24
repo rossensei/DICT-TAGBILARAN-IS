@@ -31,7 +31,15 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'catname' => 'required|string'
+        ], [
+            'catname.required' => 'The category name field is required.'
+        ]);
+
+        Category::create($request->all());
+
+        return back()->with('success', 'Category successfully created!');
     }
 
     /**
@@ -47,7 +55,7 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        return inertia('Category/Edit', ['category' => $category]);
     }
 
     /**
@@ -55,7 +63,13 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $request->validate([
+            'catname' => 'required|string'
+        ]);
+
+        $category->update($request->all());
+
+        return back()->with('success', 'Category details successfully updated!');
     }
 
     /**
@@ -63,6 +77,8 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+        $category->delete();
+
+        return back()->with('success', 'Category has been removed.');
     }
 }

@@ -37,6 +37,10 @@ Route::middleware('auth')->group(function () {
 });
 
 
-Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
+Route::get('/categories', [CategoryController::class, 'index'])->name('category.index');
+Route::post('/categories/new-category', [CategoryController::class, 'store'])->name('category.store');
+Route::get('/categories/edit/{category}', [CategoryController::class, 'edit'])->name('category.edit');
+Route::patch('/categories/update-details/{category}', [CategoryController::class, 'update'])->name('category.update');
+Route::delete('/categories/remove/{category}', [CategoryController::class, 'destroy'])->name('category.destroy');
 
 require __DIR__.'/auth.php';
