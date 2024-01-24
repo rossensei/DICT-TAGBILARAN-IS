@@ -12,7 +12,11 @@ class SubCategoryController extends Controller
      */
     public function index()
     {
-        //
+        $subcategories = SubCategory::orderBy('id', 'desc')->get();
+
+        return inertia('Subcategory/index',[
+            'subcategories' => $subcategories
+        ]);
     }
 
     /**
