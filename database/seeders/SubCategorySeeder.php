@@ -2,8 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\SubCategory;
 use Illuminate\Database\Seeder;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class SubCategorySeeder extends Seeder
 {
@@ -12,6 +13,6 @@ class SubCategorySeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        SubCategory::factory(50)->create();
     }
 }

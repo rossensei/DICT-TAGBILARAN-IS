@@ -33,14 +33,12 @@ const showingNavigationDropdown = ref(false);
                                     Dashboard
                                 </NavLink>
 
-                                <NavLink :href="route('subcategory.index')" :active="route().current('subcategory.index')">
-                                    Subcategory
-                                </NavLink>
-                            </div>
-
-                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink :href="route('category.index')" :active="route().current('category.index')">
                                     Category
+                                </NavLink>
+
+                                <NavLink :href="route('subcategory.index')" :active="route().current('subcategory.index')">
+                                    Subcategory
                                 </NavLink>
                             </div>
 

@@ -32,9 +32,10 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'catname' => 'required|string'
+            'catname' => 'required|string|unique:categories'
         ], [
-            'catname.required' => 'The category name field is required.'
+            'catname.required' => 'The category name field is required.',
+            'catname.unique' => 'The category name is already taken.',
         ]);
 
         Category::create($request->all());
@@ -64,7 +65,10 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         $request->validate([
-            'catname' => 'required|string'
+            'catname' => 'required|string|unique:categories'
+        ], [
+            'catname.required' => 'The category name field is required.',
+            'catname.unique' => 'The category name is already taken.',
         ]);
 
         $category->update($request->all());
@@ -77,8 +81,11 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        $category->delete();
-
-        return back()->with('success', 'Category has been removed.');
+        if($category->subCategories()->exists()) {
+            return back()->with('error', 'Category cannot be deleted because it has existing subcategories.');
+        } else {
+            $category->delete();
+            return back()->with('success', 'Category has been removed.');
+        }
     }
 }

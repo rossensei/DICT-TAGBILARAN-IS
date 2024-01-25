@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
 
@@ -13,8 +14,9 @@ class SubCategoryController extends Controller
     public function index()
     {
         $subcategories = SubCategory::orderBy('id', 'desc')->get();
-
-        return inertia('Subcategory/index',[
+        $categories = Category::select('id', 'catname')->get();
+        return inertia('Subcategory/Index', [
+            'categories' => $categories,
             'subcategories' => $subcategories
         ]);
     }
@@ -32,7 +34,12 @@ class SubCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'category_id' => 'required',
+            'subcatname' => 'string|required|unique:sub_categories',
+        ]);
+        SubCategory::create($request->all());
+        return back()->with('success', 'A new subcategory has been added!');
     }
 
     /**
@@ -56,7 +63,12 @@ class SubCategoryController extends Controller
      */
     public function update(Request $request, SubCategory $subCategory)
     {
-        //
+        $request->validate([
+            'category_id' => 'required',
+            'subcatname' => 'string|required|unique:sub_categories',
+        ]);
+        $subCategory->update($request->all());
+        return back()->with('success', 'Subcategory has been updated!');
     }
 
     /**
@@ -64,6 +76,8 @@ class SubCategoryController extends Controller
      */
     public function destroy(SubCategory $subCategory)
     {
-        //
+        $subCategory->delete();
+
+        return back()->with('success', 'A subcategory has been removed from list!');
     }
 }
