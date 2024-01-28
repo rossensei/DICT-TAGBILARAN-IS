@@ -34,6 +34,7 @@ class SubCategoryController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->all());
         $request->validate([
             'category_id' => 'required',
             'subcatname' => 'string|required|unique:sub_categories',

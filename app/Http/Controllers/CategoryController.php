@@ -13,9 +13,9 @@ class CategoryController extends Controller
     public function index()
     {
         // 
-        $categories = Category::all();
+        $categories = Category::select('id', 'catname')->get();
 
-        return inertia('Category/Index', ['categories' => $categories]);
+        return inertia('TestCategory/Index', ['categories' => $categories]);
     }
 
     /**

@@ -10,13 +10,20 @@ const props = defineProps({
 })
 
 const page = usePage();
-
 const subCategories = ref([]);
+// const selectedCategory = ref(null);
 
-axios.defaults.baseURL = page.props.appUrl; 
-// const BASE_URL = axios.defaults.baseURL;
+axios.defaults.baseURL = page.props.appUrl;
+
+const form = useForm({
+    category_id: null,
+    subcatname: '',
+})
+
 const getSubCategories = (ev) => {
-    // console.log('fetch sub-categories for ' + ev.target.value);
+    // selectedCategory.value = ev.target.value;
+    form.category_id = ev.target.value;
+
     try {
         axios.get(`/api/${ev.target.value}/sub-categories`)
             .then((response) => {
@@ -26,6 +33,12 @@ const getSubCategories = (ev) => {
     } catch (e) {
         console.log(e);
     }
+}
+
+const submit = () => {
+    form.post('/subcategory/add-new', {
+        onSuccess: () => form.reset()
+    })
 }
 
 </script>
@@ -42,7 +55,7 @@ const getSubCategories = (ev) => {
             <div class="flex items-start space-x-9 px-44 mt-10">
 
             <div class="max-w-[350px] w-full p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
-                <form class="space-y-6" action="#">
+                <form class="space-y-6" @submit.prevent="submit">
                     <h5 class="text-xl font-medium text-gray-900 dark:text-white">Create Subcategory</h5>
 
                     <div class="m:col-span-1">
@@ -58,7 +71,7 @@ const getSubCategories = (ev) => {
 
                     <div>
                         <label for="subcatname" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Subcategory Name: </label>
-                        <input type="text" name="subcatname" id="subcatname" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="Subcategory Name" required>
+                        <input type="text" v-model="form.subcatname" id="subcatname" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="Subcategory Name" required>
                     </div>
 
 
@@ -71,9 +84,9 @@ const getSubCategories = (ev) => {
                     <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
                         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                             <tr>
-                                <th scope="col" class="px-6 py-3">
+                                <!-- <th scope="col" class="px-6 py-3">
                                    #
-                                </th>
+                                </th> -->
                                 <th scope="col" class="px-6 py-3">
                                     Subcategory Name
                                 </th>
@@ -84,9 +97,9 @@ const getSubCategories = (ev) => {
                         </thead>
                         <tbody>
                             <tr v-for="subcategory in subCategories" :key="subcategory.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                <!-- <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                     {{ subcategory.id }}
-                                </th>
+                                </th> -->
 
                                 <td class="px-6 py-4">
                                     {{ subcategory.subcatname }}

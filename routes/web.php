@@ -37,6 +37,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/subcategory', [SubCategoryController::class, 'index'])->name('subcategory.index');
+    Route::post('/subcategory/add-new', [SubCategoryController::class, 'store'])->name('subcategory.store');
 });
 
 
