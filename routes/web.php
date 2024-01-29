@@ -18,8 +18,19 @@ use Inertia\Inertia;
 |
 */
 
+// Route::get('/', function () {
+//     return Inertia::render('Welcome', [
+//         'canLogin' => Route::has('login'),
+//         'canRegister' => Route::has('register'),
+//         'laravelVersion' => Application::VERSION,
+//         'phpVersion' => PHP_VERSION,
+//     ]);
+// });
+
 Route::get('/', function () {
+    $imageUrl = asset('images/DICT-BANNER.png');
     return Inertia::render('Welcome', [
+        'imageUrl' => $imageUrl,
         'canLogin' => Route::has('login'),
         'canRegister' => Route::has('register'),
         'laravelVersion' => Application::VERSION,
