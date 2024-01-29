@@ -36,15 +36,19 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/subcategory', [SubCategoryController::class, 'index'])->name('subcategory.index');
-    Route::post('/subcategory/add-new', [SubCategoryController::class, 'store'])->name('subcategory.store');
+    // Route::get('/subcategory', [SubCategoryController::class, 'index'])->name('subcategory.index');
+    // Route::post('/subcategory/add-new', [SubCategoryController::class, 'store'])->name('subcategory.store');
 });
 
 
 Route::get('/categories', [CategoryController::class, 'index'])->name('category.index');
 Route::post('/categories/new-category', [CategoryController::class, 'store'])->name('category.store');
 Route::get('/categories/edit/{category}', [CategoryController::class, 'edit'])->name('category.edit');
-Route::patch('/categories/update-details/{category}', [CategoryController::class, 'update'])->name('category.update');
+Route::patch('/categories/update/{category}', [CategoryController::class, 'update'])->name('category.update');
 Route::delete('/categories/remove/{category}', [CategoryController::class, 'destroy'])->name('category.destroy');
+
+Route::get('/categories/{category}/subcategories', [SubCategoryController::class, 'index'])->name('subcategory.index');
+Route::post('/categories/{category}/subcategories/new-subcategory', [SubCategoryController::class, 'store'])->name('subcategory.store');
+Route::patch('/subcategories/{subCategory}/update', [SubCategoryController::class, 'update'])->name('subcategory.update');
 
 require __DIR__.'/auth.php';

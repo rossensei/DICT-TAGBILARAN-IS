@@ -16,7 +16,7 @@ class CategoryController extends Controller
         //
         $categories = Category::select('id', 'catname')->get();
 
-        return inertia('TestCategory/Index', ['categories' => $categories]);
+        return inertia('Category/Index', ['categories' => $categories]);
     }
 
     /**

@@ -1,119 +1,80 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import TextInput from '@/Components/TextInput.vue';
+import InputError from '@/Components/InputError.vue';
+import SubCategoryList from './components/SubCategoryList.vue';
+import SubCategoryItem from './components/SubCategoryItem.vue';
 import { Head } from '@inertiajs/vue3';
 import { useForm, usePage } from '@inertiajs/vue3';
-import axios from 'axios';
 import { onMounted, ref } from 'vue';
 
 const props = defineProps({
-    categories: Array,
+    category: Object,
+    subcategories: Array,
 })
-
-const page = usePage();
-const subCategories = ref([]);
-// const selectedCategory = ref(null);
-
-axios.defaults.baseURL = page.props.appUrl;
 
 const form = useForm({
-    category_id: null,
-    subcatname: '',
+    subcatname: ''
 })
 
-const getSubCategories = (ev) => {
-    // selectedCategory.value = ev.target.value;
-    form.category_id = ev.target.value;
-
-    try {
-        axios.get(`/api/${ev.target.value}/sub-categories`)
-            .then((response) => {
-                // console.log(response.data);
-                subCategories.value = response.data;
-            })
-    } catch (e) {
-        console.log(e);
-    }
-}
-
 const submit = () => {
-    form.post('/subcategory/add-new', {
+    form.post(`/categories/${props.category.id}/subcategories/new-subcategory`, {
         onSuccess: () => form.reset()
     })
 }
-
 </script>
 
 <template>
-    <Head title="Subcategory" />
+    <Head :title="category.catname" />
 
     <AuthenticatedLayout>
         <template #header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">Subcategory</h2>
+            <h2 class="font-semibold text-xl text-gray-800 leading-tight">{{ category.catname }}</h2>
         </template>
 
-        <div>
-            <div class="flex items-start space-x-9 px-44 mt-10">
+        <div class="py-12">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <p class="text-gray-900 mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat excepturi perferendis, explicabo cumque, dolorem et sapiente, beatae quidem sequi animi eligendi voluptatum.</p>
+                <div class="p-4 bg-white shadow-sm w-[600px] rounded-lg border-l-8 border-blue-700 mb-4">
+                    <form class="flex items-center space-x-2" @submit.prevent="submit">
+                        <div class="flex-1 relative">
+                            <TextInput
+                            v-model="form.subcatname"
+                            id="subcatname"
+                            class="w-full text-sm rounded-md"
+                            :class="{ 'border-red-600' : form.errors.subcatname }"
+                            placeholder="Subcategory"
+                            />
 
-            <div class="max-w-[350px] w-full p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-6 md:p-8 dark:bg-gray-800 dark:border-gray-700">
-                <form class="space-y-6" @submit.prevent="submit">
-                    <h5 class="text-xl font-medium text-gray-900 dark:text-white">Create Subcategory</h5>
+                            <button
+                            v-if="form.subcatname !== null && form.subcatname !== ''"
+                            type="button"
+                            @click="form.reset()"
+                            class="absolute right-0 top-1/2 botton-1/2 transform -translate-x-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-600">
+                            <i class="fa-solid fa-rotate-left"></i>
+                            </button>
+                        </div>
 
-                    <div class="m:col-span-1">
-                            <label for="category" class="block text-sm font-medium leading-6 text-gray-900">Category</label>
-                            <div class="mt-2">
-                              <select @change="getSubCategories($event)" id="category" name="category" autocomplete="category" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
-                                <option selected disabled   >Select Category</option>
-                                <option v-for="cat in categories" :key="cat.id" :value="cat.id">{{ cat.catname }}</option>
-                              </select>
-                              <div class="text-sm text-red-500 italic"></div>
-                            </div>
-                          </div>
-
-                    <div>
-                        <label for="subcatname" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Subcategory Name: </label>
-                        <input type="text" v-model="form.subcatname" id="subcatname" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="Subcategory Name" required>
-                    </div>
-
-
-                    <button type="submit" class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add Subcategory</button>
-                </form>
-            </div>
-
-
-                <div class="relative overflow-x-auto shadow-md sm:rounded-lg w-full">
-                    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                            <tr>
-                                <!-- <th scope="col" class="px-6 py-3">
-                                   #
-                                </th> -->
-                                <th scope="col" class="px-6 py-3">
-                                    Subcategory Name
-                                </th>
-                                <th scope="col" class="px-6 py-3">
-                                    Action
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="subcategory in subCategories" :key="subcategory.id" class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
-                                <!-- <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                    {{ subcategory.id }}
-                                </th> -->
-
-                                <td class="px-6 py-4">
-                                    {{ subcategory.subcatname }}
-                                </td>
-                                <td class="px-6 py-4">
-                                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                                </td>
-                            </tr>
-
-                        </tbody>
-                    </table>
+                        <button type="submit" class="text-sm text-white bg-blue-700 hover:bg-blue-600 px-4 py-2 rounded-md" :disabled="form.processing">
+                            <i v-if="form.processing" class="fa-solid fa-spinner text-md animate-spin"></i>
+                            <!-- <svg v-if="form.processing" aria-hidden="true" class="inline w-4 h-4 text-gray-200 animate-spin fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
+                                <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z" fill="currentFill"/>
+                            </svg> -->
+                            <span v-else>Create</span>
+                        </button>
+                    </form>
+                    <InputError :message="form.errors.subcatname" />
                 </div>
 
+                <h1 class="text-xl font-semibold text-gray-700 mb-2">Subcategories of {{ category.catname }}</h1>
+                
+                <div class="p-4 bg-white shadow-sm rounded-md w-[600px]">
+                    <SubCategoryList>
+                        <SubCategoryItem v-for="item in subcategories" :key="item.id" :subcategory="item" :categoryId="category.id" />
+                    </SubCategoryList>
+                </div>
+            </div>
         </div>
-    </div>
     </AuthenticatedLayout>
 </template>

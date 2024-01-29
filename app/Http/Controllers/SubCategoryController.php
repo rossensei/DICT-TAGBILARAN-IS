@@ -5,18 +5,32 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\SubCategory;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class SubCategoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Category $category)
     {
-        $subcategories = SubCategory::orderBy('id', 'desc')->get();
-        $categories = Category::select('id', 'catname')->get();
+        // $subcategories = SubCategory::orderBy('id', 'desc')->get();
+        // $categories = Category::select('id', 'catname')->get();
+        // return inertia('Subcategory/Index', [
+        //     'categories' => $categories,
+        //     'subcategories' => $subcategories
+        // ]);
+
+        $subcategories = SubCategory::where('category_id', $category->id)
+            ->select('id', 'category_id', 'subcatname')
+            ->get();
+
+        $categoryData = Category::where('id', $category->id)
+            ->select('id', 'catname')
+            ->first();
+
         return inertia('Subcategory/Index', [
-            'categories' => $categories,
+            'category' => $categoryData,
             'subcategories' => $subcategories
         ]);
     }
@@ -32,15 +46,17 @@ class SubCategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, Category $category)
     {
-        // dd($request->all());
         $request->validate([
-            'category_id' => 'required',
             'subcatname' => 'string|required|unique:sub_categories',
         ]);
-        SubCategory::create($request->all());
-        return back()->with('success', 'A new subcategory has been added!');
+        // SubCategory::create($request->all());
+        $category->subCategories()->create([
+            'subcatname' => $request->subcatname
+        ]);
+
+        return back()->with('success', 'A new subcategory has been added to '.$category->catname.'!');
     }
 
     /**
@@ -65,10 +81,14 @@ class SubCategoryController extends Controller
     public function update(Request $request, SubCategory $subCategory)
     {
         $request->validate([
-            'category_id' => 'required',
-            'subcatname' => 'string|required|unique:sub_categories',
+            'subcatname' => ['required', 'string', Rule::unique(SubCategory::class)->ignore($subCategory->id)],
+        ], [
+            'subcatname.required' => 'The subcategory name field is required.',
+            'subcatname.unique' => 'The subcategory name already exist.',
         ]);
+        
         $subCategory->update($request->all());
+        
         return back()->with('success', 'Subcategory has been updated!');
     }
 
