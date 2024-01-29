@@ -3,7 +3,7 @@ import { Link } from '@inertiajs/vue3';
 </script>
 
 <template>
-    <div class="min-h-screen flex flex-col items-center pt-6 sm:pt-0 bg-blue-800">
+    <div class="min-h-screen flex flex-col items-center pt-6 sm:pt-0 bg-sky-600">
         <div>
             <Link href="/">
                 <img src="https://dict.gov.ph/wp-content/uploads/2019/12/DICT-Banner-Logo-for-dark-background300px.png" class="w-75 h-30 mt-20 fill-current text-gray-500" />
