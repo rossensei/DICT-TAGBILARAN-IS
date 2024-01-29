@@ -8,16 +8,22 @@ defineProps({
 
 <template>
     <Head title="Welcome" />
-    
+
     <div class="w-full min-h-screen bg-blue-700">
         <div class="relative h-[300px] flex bg-white">
-                <img :src="imageUrl" alt="Logo" class="w-[390px] h-[165px]">
+                <img :src="imageUrl" alt="Logo" class="w-[400px] h-[165px] ms-8">
                 <div class="h-0 w-0 border-r-[100vw] border-r-transparent border-b-[7vw] border-b-red-700 absolute bottom-0 z-10"></div>
                 <div class="h-0 w-0 border-r-[100vw] border-r-transparent border-t-[15.5vw] border-t-blue-700 rotate-180 absolute bottom-0"></div>
 
                 <div class="absolute min-h-screen w-full z-20">
-                    <div class="flex items-center justify-center min-h-screen">
-                        <h1 class="text-4xl font-bold text-white">DICT OF THE PEOPLE AND FOR THE PEOPLE</h1>
+                    <div class="flex items-center justify-center min-h-screen flex-col">
+                        <h1 class="fade-in text-4xl font-bold text-white mb-2">"DICT OF THE PEOPLE AND FOR THE PEOPLE"</h1>
+                        <p class="fade-in-p text-white text-center">Welcome to the Department of Information Communications and Technology - Inventory System <br>
+                            Where innovation meets service in the digital era. At DICT, we are committed to fostering a <br>
+                            connected and empowered society. Join us in shaping a digital future that serves every citizen. <br><br>
+                            Login now and be a part of the transformative journey.
+                        </p>
+                        <Link :href="route('login')" as="button" class="px-8 py-2 rounded bg-yellow-400 hover:bg-yellow-500 text-lg font-bold text-blue-900 tracking-widest flex mt-10">Get Started -></Link>
                     </div>
                 </div>
             </div>
@@ -52,7 +58,26 @@ defineProps({
     position: absolute;
     rotate: 180deg;
 }
+ .fade-in {
+    animation: fadeInAnimation ease 3s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+ }
 
+ .fade-in-p {
+    animation: fadeInAnimation ease 5s;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+ }
+
+ @keyframes fadeInAnimation {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
 </style>
 
 
