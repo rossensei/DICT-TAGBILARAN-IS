@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class CategoryController extends Controller
 {
@@ -12,10 +13,10 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        // 
-        $categories = Category::all();
+        //
+        $categories = Category::select('id', 'catname')->get();
 
-        return inertia('Category/Index', ['categories' => $categories]);
+        return inertia('TestCategory/Index', ['categories' => $categories]);
     }
 
     /**
@@ -65,10 +66,9 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         $request->validate([
-            'catname' => 'required|string|unique:categories'
+            'catname' => ['required', 'string', Rule::unique(Category::class)->ignore($category->id)],
         ], [
             'catname.required' => 'The category name field is required.',
-            'catname.unique' => 'The category name is already taken.',
         ]);
 
         $category->update($request->all());
