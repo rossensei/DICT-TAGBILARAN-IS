@@ -1,5 +1,5 @@
 <script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import AppLayout from '@/Layouts/AppLayout.vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputError from '@/Components/InputError.vue';
 import SubCategoryList from './components/SubCategoryList.vue';
@@ -27,7 +27,7 @@ const submit = () => {
 <template>
     <Head :title="category.catname" />
 
-    <AuthenticatedLayout>
+    <AppLayout>
         <template #header>
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">{{ category.catname }}</h2>
         </template>
@@ -76,5 +76,5 @@ const submit = () => {
                 </div>
             </div>
         </div>
-    </AuthenticatedLayout>
+    </AppLayout>
 </template>

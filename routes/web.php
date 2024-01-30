@@ -51,6 +51,9 @@ Route::middleware('auth')->group(function () {
     // Route::post('/subcategory/add-new', [SubCategoryController::class, 'store'])->name('subcategory.store');
 });
 
+Route::get('/test', function(){
+    return Inertia::render('test');
+});
 
 Route::get('/categories', [CategoryController::class, 'index'])->name('category.index');
 Route::post('/categories/new-category', [CategoryController::class, 'store'])->name('category.store');

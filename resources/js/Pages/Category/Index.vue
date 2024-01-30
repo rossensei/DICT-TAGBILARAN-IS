@@ -1,11 +1,12 @@
 <script setup>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+// import AppLayout from '@/Layouts/AppLayout.vue';
 import TextInput from '@/Components/TextInput.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import InputError from '@/Components/InputError.vue';
 import CategoryItem from './components/CategoryItem.vue';
 import CategoryList from './components/CategoryList.vue';
 import { Head, useForm } from '@inertiajs/vue3';
+import AppLayout from '@/Layouts/AppLayout.vue';
 
 const props = defineProps({
     categories: Array
@@ -25,7 +26,7 @@ const submit = () => {
 <template>
     <Head title="Categories" />
 
-    <AuthenticatedLayout>
+    <AppLayout>
         <template #header>
             <h1 class="text-2xl font-semibold text-gray-700">Categories</h1>
         </template>
@@ -74,5 +75,5 @@ const submit = () => {
                 </div>
             </div>
         </div>
-    </AuthenticatedLayout>
+    </AppLayout>
 </template>
